@@ -1,0 +1,36 @@
+* Query và Path có một số điểm khác biệt quan trọng trong FastAPI:
+
+    1.  Vị trí trong URL:
+        Path: Dùng cho các tham số nằm trong đường dẫn URL (ví dụ: /books/{book_id})
+        Query: Dùng cho các tham số truy vấn sau dấu ? (ví dụ: /books?rating=5)
+
+    2. Tính bắt buộc:
+        Path: Thường là bắt buộc, vì chúng là một phần của đường dẫn
+        Query: Thường có thể tùy chọn, với giá trị mặc định hoặc None
+
+    3. Cú pháp khai báo:
+        Path: @app.get('/books/{book_id}')
+        Query: @app.get('/books')
+
+
+    4. Tính chất:
+        Path: Thường dùng để định danh tài nguyên cụ thể
+        Query: Thường dùng để lọc, sắp xếp hoặc định dạng kết quả
+
+
+    5. Trường hợp sử dụng:
+        Path: Lấy một cuốn sách cụ thể theo ID
+        Query: Lọc sách theo tác giả, sắp xếp theo ngày, giới hạn số lượng kết quả
+
+    6. Tuy nhiên, cả hai đều có chức năng tương tự về:
+        Kiểm tra kiểu dữ liệu
+        Xác thực giá trị (gt, lt, regex, v.v.)
+        Tạo tài liệu API tự động
+
+
+    - # ví dụ ở đây {book_id} là tham số đường dẫn 
+    @app.delete('/books/delete/{book_id}')
+
+    - cái này là tham số truy vấn
+    @app.get('/books/find_rating/rate')
+    async def rating_book(book_rating: int =   Query(gt=0, lt=6)):

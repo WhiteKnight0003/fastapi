@@ -1,0 +1,103 @@
+# Hướng dẫn sử dụng mã trạng thái HTTP trong FastAPI
+
+Mã trạng thái HTTP được sử dụng để chỉ định kết quả của một yêu cầu HTTP. Dưới đây là hướng dẫn khi nào nên sử dụng các mã trạng thái khác nhau trong FastAPI:
+
+## Mã trạng thái thành công (2xx)
+
+### 200 OK
+    - Sử dụng cho các yêu cầu GET thành công có trả về dữ liệu. Đây là mã mặc định cho các hoạt động GET.
+    - ví dụ :
+    @app.get('/books/all_book', status_code=status.HTTP_200_OK)
+    async def read_all_book():
+        return BOOKS
+
+
+### 201 Created
+    - Sử dụng khi một tài nguyên đã được tạo thành công, thường với các yêu cầu POST:
+    - ví dụ :
+        @app.post('/books/create_book', status_code=status.HTTP_201_CREATED)
+        async def create(book: BookRequest):
+
+
+### 204 No Content
+    - Sử dụng khi hoạt động thành công nhưng không có nội dung để trả về. 
+    - Phổ biến cho các hoạt động PUT, DELETE nơi bạn chỉ cần xác nhận thành công:
+    - ví dụ :
+        @app.put('/books/update_book', status_code=status.HTTP_204_NO_CONTENT)
+        async def update_book(book: BookRequest):
+
+        @app.delete('/books/delete_book', status_code=status.HTTP_204_NO_CONTENT)
+        async def delete_book(book: BookRequest):
+
+
+## Mã trạng thái lỗi (4xx)
+
+### 400 Bad Request
+    - Sử dụng khi máy khách gửi yêu cầu không hợp lệ (cú pháp sai, tham số không hợp lệ).
+
+### 401 Unauthorized
+    - Sử dụng khi cần xác thực nhưng không được cung cấp.
+
+### 403 Forbidden
+    - Sử dụng khi máy khách không có quyền truy cập vào tài nguyên.
+
+### 404 Not Found
+    - Sử dụng khi tài nguyên được yêu cầu không tồn tại:
+
+    if not found:
+        raise HTTPException(status_code=404, detail='Không tìm thấy mục')
+
+
+### 422 Unprocessable Entity
+    - FastAPI tự động trả về mã này khi xác thực thất bại (ví dụ: khi tham số đường dẫn không đáp ứng các ràng buộc).
+
+## Mã trạng thái lỗi máy chủ (5xx)
+
+### 500 Internal Server Error
+    - Dành cho các lỗi máy chủ không mong muốn.
+
+
+## Khuyến nghị cho API của bạn:
+
+1. Sử dụng 200 cho các hoạt động đọc (GET) có trả về dữ liệu
+2. Sử dụng 201 cho việc tạo tài nguyên (POST)
+3. Sử dụng 204 cho các cập nhật (PUT) và xóa (DELETE) không trả về dữ liệu
+4. Sử dụng mã lỗi thích hợp (4xx) cho các lỗi từ phía máy khách
+5. Sử dụng HTTPException với mã trạng thái thích hợp khi xử lý lỗi
+
+
+
+
+Việc cài đặt và sử dụng các mã trạng thái HTTP (status.HTTP_XXX) trong FastAPI có nhiều mục đích và lợi ích quan trọng:
+
+### 1. Truyền đạt kết quả xử lý chính xác
+- Giúp máy khách (client) hiểu chính xác kết quả của yêu cầu (request) họ đã gửi
+- Phân biệt rõ ràng giữa thành công, thất bại và các tình huống khác nhau
+
+### 2. Tuân thủ chuẩn RESTful API
+- Các mã trạng thái HTTP là một phần của tiêu chuẩn RESTful API
+- Đảm bảo API của bạn tuân thủ các quy ước và thực hành tốt nhất trong ngành
+
+### 3. Tăng khả năng tương tác và tích hợp
+- Cho phép các ứng dụng khách (frontend, mobile app, hoặc các dịch vụ khác) xử lý các phản hồi một cách nhất quán
+- Giúp việc tích hợp với các hệ thống khác dễ dàng hơn
+
+### 4. Cải thiện trải nghiệm người dùng
+- Giúp hiển thị thông báo lỗi phù hợp cho người dùng cuối
+- Ví dụ: hiển thị "Không tìm thấy sách" (404) thay vì một thông báo lỗi chung chung
+
+### 5. Dễ dàng debug và theo dõi
+- Giúp các nhà phát triển nhanh chóng xác định vấn đề khi kiểm tra API
+- Giúp các công cụ logging và monitoring phân loại các vấn đề hiệu quả hơn
+
+### 6. Tận dụng tính năng của FastAPI
+- FastAPI sử dụng mã trạng thái để tạo tài liệu tự động chính xác (Swagger/OpenAPI)
+- Giúp FastAPI xử lý các trường hợp đặc biệt (như 204 No Content không trả về body)
+
+### Ví dụ cụ thể:
+- Khi trả về 201 (Created), client biết rằng một tài nguyên mới đã được tạo thành công
+- Khi trả về 204 (No Content), client không mong đợi nhận được dữ liệu trả về
+- Khi nhận được 404 (Not Found), client biết rằng tài nguyên yêu cầu không tồn tại
+- Khi nhận được 400 (Bad Request), client biết rằng yêu cầu của họ có vấn đề cần sửa
+
+Việc sử dụng đúng các mã trạng thái HTTP là một phần quan trọng trong việc xây dựng API chuyên nghiệp, dễ hiểu và dễ sử dụng.
