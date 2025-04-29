@@ -10,8 +10,6 @@ from sqlalchemy.orm import Session
 
 router = APIRouter()
 
-
-
 def get_db():
     db = Sessionlocal()
     try:
@@ -20,6 +18,14 @@ def get_db():
         db.close()
 
 db_dependency = Annotated[Session, Depends(get_db)]
+# Annotated là một cách để gắn thêm metadata
+# session : Đây là kiểu dữ liệu (class) của SQLAlchemy session — dùng để tương tác với database (thêm, sửa, xóa, truy vấn).
+# Depends(get_db) : Đây là lời gọi đến hàm get_db() mà FastAPI sẽ tự động gọi giúp bạn mỗi khi API được chạy, và truyền vào session (db) cho bạn.
+'''
+Ghép lại: Annotated[Session, Depends(get_db)]
+- Tôi muốn một biến kiểu Session, và tôi muốn FastAPI tự động tạo biến đó bằng cách gọi hàm get_db().”
+
+'''
 
 class TodoRequest(BaseModel):
     title: str = Field(min_length=3)

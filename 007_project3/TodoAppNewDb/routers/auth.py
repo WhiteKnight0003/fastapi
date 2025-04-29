@@ -1,19 +1,35 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel
-from typing import Optional
+from typing import Annotated, Optional
 from starlette import status
 from database import SessionLocal
+from fastapi import Depends, HTTPException, APIRouter
 from models import User , Todos
+from sqlalchemy.orm import Session
+from passlib.context import CryptContext
+# CryptContext giúp bạn dễ dàng mã hóa và xác minh mật khẩu bằng cách định nghĩa một "ngữ cảnh mã hóa" (encryption context), tức là cấu hình các thuật toán và tùy chọn mã hóa.
+
+from fastapi.security import OAuth2PasswordRequestForm
 
 router = APIRouter()
 
-# def get_db():
-#     db = SessionLocal()
-#     try:
-#         yield db
-#     finally:
-#         db.close()
+bcrypt_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
+'''
+- schemes=['bcrypt']: nghĩa là bạn đang chỉ định thuật toán mã hóa là bcrypt.
 
+- bcrypt là một thuật toán băm mạnh, thường dùng để lưu trữ mật khẩu một cách an toàn.
+
+- deprecated='auto': là một tùy chọn giúp tự động đánh dấu những thuật toán không còn được dùng nữa là đã lỗi thời (deprecated).
+'''
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+db_dependency = Annotated[Session, Depends(get_db)]
 
 class CreateUserRequest(BaseModel):
     email: str 
@@ -25,7 +41,19 @@ class CreateUserRequest(BaseModel):
     role: str
 
 @router.post('/create_user', status_code=status.HTTP_201_CREATED)
-async def create_user(user: CreateUserRequest):
+async def create_user(user: CreateUserRequest, db : db_dependency):
     user_model = User(**user.model_dump())
-    # db.add(user_model)
-    return user_model
+    user_model.hashed_password = bcrypt_context.hash(user.hashed_password)
+    db.add(user_model)
+    db.commit()
+    return 'them thanh cong'
+
+@router.get('/', status_code=status.HTTP_200_OK)
+async def read_all(db: db_dependency):
+    return db.query(User).all()
+
+
+@router.post('/token')
+async def login_for_access_token(form_data : Annotated[OAuth2PasswordRequestForm, Depends()],
+                                 db : db_dependency):
+    return 'token'
