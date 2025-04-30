@@ -1,0 +1,90 @@
+🔰 Depends() trong Python - Giải thích đơn giản
+
+💡 Depends() là gì nói đơn giản?
+Depends() trong FastAPI giống như việc bạn nhờ người khác làm một việc gì đó trước khi bạn bắt đầu công việc chính của mình.
+
+🍳 Ví dụ thực tế:
+Bạn là đầu bếp (route handler) cần có nguyên liệu (dữ liệu) để nấu ăn. Thay vì tự đi chợ, bạn nhờ người phụ việc (Depends) đi lấy nguyên liệu giúp bạn.
+
+🧑‍🍳 Cách hiểu qua ví dụ đơn giản:
+```python
+from fastapi import FastAPI, Depends
+
+app = FastAPI()
+
+# "Người phụ việc" đi lấy nước
+def get_drink():
+    return "Nước cam"
+
+# "Người phụ việc" đi lấy thức ăn
+def get_food():
+    return "Bánh mì"
+
+# Bạn là đầu bếp - chỉ cần tập trung nấu ăn
+@app.get("/breakfast")
+def make_breakfast(drink: str = Depends(get_drink), food: str = Depends(get_food)):
+    return {"Bữa sáng của bạn": f"{food} và {drink}"}
+```
+
+📌 Khi ai đó truy cập đường dẫn /breakfast:
+- FastAPI sẽ gọi `get_drink()` lấy "Nước cam"
+- Rồi gọi `get_food()` lấy "Bánh mì"
+- Sau đó mới thực hiện `make_breakfast()` với dữ liệu đã chuẩn bị sẵn
+
+📚 Ví dụ thực tế dễ hiểu:
+
+1️⃣ Kiểm tra người dùng đã đăng nhập chưa:
+```python
+from fastapi import FastAPI, Depends, HTTPException
+
+app = FastAPI()
+
+def check_login(username: str = None):
+    # Giả sử kiểm tra username từ cookie hoặc session
+    if not username:
+        raise HTTPException(status_code=401, detail="Bạn chưa đăng nhập")
+    return {"username": username}
+
+@app.get("/profile")
+def view_profile(user: dict = Depends(check_login)):
+    # Hàm này chỉ chạy khi đã đăng nhập thành công
+    return {"message": f"Xin chào {user['username']}"}
+```
+
+2️⃣ Truy cập database đơn giản hơn:
+```python
+from fastapi import FastAPI, Depends
+
+app = FastAPI()
+
+def get_db():
+    # Giả lập kết nối đến database
+    print("Mở kết nối đến database")
+    db = {"users": ["Minh", "Hoa", "Nam"]}
+    
+    # Trả về database cho người sử dụng
+    yield db
+    
+    # Sau khi xong, đóng kết nối
+    print("Đóng kết nối database")
+
+@app.get("/users")
+def list_users(db = Depends(get_db)):
+    # Không cần lo về việc kết nối/đóng database
+    return {"users": db["users"]}
+```
+
+✨ Lợi ích đơn giản của Depends():
+- ✅ Giảm lặp code: Viết một lần, dùng nhiều nơi
+- ✅ Tập trung vào việc chính: Route handler chỉ tập trung vào logic chính
+- ✅ Dễ bảo trì: Thay đổi logic phụ trợ tại một chỗ duy nhất
+- ✅ Sạch sẽ hơn: Code gọn gàng, dễ đọc hơn
+
+🕐 Khi nào nên dùng Depends()?
+- 🔁 Khi bạn thấy mình copy-paste code giữa các route handler
+- 🗃 Khi bạn cần truy cập database trong nhiều hàm
+- 🔐 Khi bạn cần xác thực người dùng trước khi xử lý yêu cầu
+- 🧩 Khi bạn muốn tách phần chuẩn bị dữ liệu và xử lý chính
+
+🎯 Kết luận:
+Depends() giúp code của bạn trở nên sạch sẽ, dễ quản lý bằng cách chia nhỏ công việc thành các phần nhỏ có thể tái sử dụng.
