@@ -31,6 +31,15 @@ def get_db():
 
 db_dependency = Annotated[Session, Depends(get_db)]
 
+def authenticate_user(username: str, password: str, db):
+    user = db.query(User).filter(User.username == username).first()
+    if not user: # not None and not empty
+        return False
+    if not bcrypt_context.verify(password, user.hashed_password): 
+        ''' so sánh mật khẩu đã nhập rồi dùng thuật toán mã hóa  với mật khẩu đã được mã hóa trong db '''
+        return False
+    return user
+
 class CreateUserRequest(BaseModel):
     email: str 
     username: str
@@ -54,6 +63,17 @@ async def read_all(db: db_dependency):
 
 
 @router.post('/token')
-async def login_for_access_token(form_data : Annotated[OAuth2PasswordRequestForm, Depends()],
-                                 db : db_dependency):
-    return 'token'
+async def login_for_access_token(
+    form_data : Annotated[OAuth2PasswordRequestForm, Depends()],
+    db : db_dependency
+):
+    user = authenticate_user(form_data.username, form_data.password, db) 
+    """usernaem, pass, db"""
+    if not user:
+        raise HTTPException(
+            status_code=401,
+            detail="Failed Authentication"
+        )
+    return {"message": "Success Authentication"}
+    
+

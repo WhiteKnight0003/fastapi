@@ -1,0 +1,104 @@
+
+✅ JWT là gì?
+JWT (JSON Web Token) là chuỗi mã hóa chứa thông tin người dùng, dùng để xác thực và phân quyền. Trong FastAPI, JWT giúp xác minh người dùng mà không cần lưu phiên (stateless).
+
+🧩 Cấu trúc JWT gồm 3 phần:
+header.payload.signature
+
+- Header: thuật toán + loại token (ví dụ: HS256)
+- Payload: thông tin người dùng (ID, quyền, hạn dùng, ...)
+- Signature: phần mã hóa để bảo vệ token
+
+🔁 Cách JWT hoạt động trong FastAPI:
+1. Người dùng đăng nhập → server tạo JWT và trả về
+2. Client lưu JWT và gửi lại token trong mỗi request (qua Authorization: Bearer <token>)
+3. FastAPI kiểm tra token:
+   - Giải mã
+   - Kiểm tra chữ ký (secret key)
+   - Kiểm tra thời gian hết hạn (exp)
+4. Nếu hợp lệ → Cho phép truy cập
+
+
+🔐 Trường hợp sử dụng thực tế: Hệ thống xác thực người dùng bằng JWT trong ứng dụng Web
+
+🎯 Tình huống:
+Xây dựng ứng dụng web (FastAPI + React) cho phép người dùng đăng nhập và truy cập nội dung cá nhân như trang cá nhân, cài đặt tài khoản,...
+
+✅ Quy trình hoạt động:
+
+1. Người dùng gửi email + mật khẩu đến API /login.
+2. Backend kiểm tra thông tin đăng nhập:
+   - Nếu đúng → tạo JWT chứa thông tin người dùng và thời gian hết hạn.
+   - Trả JWT về cho frontend.
+3. Frontend lưu JWT vào localStorage hoặc cookie.
+4. Mỗi request tiếp theo đến backend đều gửi JWT kèm theo trong header:
+   Authorization: Bearer <jwt_token>
+5. Backend kiểm tra token:
+   - Giải mã
+   - Kiểm tra chữ ký và thời gian hết hạn
+   - Nếu hợp lệ → cho phép truy cập API
+
+🔧 Ví dụ API:
+
+1. /login (POST)
+Yêu cầu:
+{
+  "email": "user@example.com",
+  "password": "123456"
+}
+Phản hồi:
+{
+  "access_token": "<JWT_HERE>",
+  "token_type": "bearer"
+}
+
+2. /profile (GET) - API cần xác thực
+Header:
+Authorization: Bearer <JWT_HERE>
+Phản hồi:
+{
+  "username": "user1",
+  "email": "user@example.com",
+  "role": "admin"
+}
+
+🧠 Tại sao nên dùng JWT?
+- Stateless: không cần lưu session server
+- Nhanh: xác minh bằng token, không cần truy vấn DB
+- Bảo mật (HTTPS + hết hạn)
+- Dễ mở rộng, phù hợp với hệ thống microservices
+
+
+
+Khi một công ty có 2 ứng dụng khác nhau cùng sử dụng chung JWT token, điều này mang lại cả lợi ích và rủi ro. Dưới đây là phân tích ngắn gọn:
+
+✅ Tác dụng (Lợi ích)
+1. Single Sign-On (SSO)
+Người dùng chỉ cần đăng nhập 1 lần, sau đó có thể truy cập cả hai ứng dụng mà không cần đăng nhập lại.
+
+Trải nghiệm người dùng mượt mà, tiện lợi hơn.
+
+2. Giảm tải server
+Không cần lưu session → giảm sử dụng tài nguyên máy chủ.
+
+Các ứng dụng chỉ cần giải mã token để xác thực người dùng.
+
+3. Dễ mở rộng
+Khi triển khai thêm ứng dụng thứ 3, chỉ cần chia sẻ token chung và xác thực theo cùng chuẩn → không cần viết lại hệ thống xác thực.
+
+⚠️ Tác hại (Rủi ro)
+1. Tăng rủi ro bảo mật
+Nếu một trong hai ứng dụng bị tấn công hoặc lộ token, hacker có thể dùng token đó để truy cập mọi ứng dụng khác dùng chung token → phạm vi tấn công mở rộng.
+
+2. Không thể kiểm soát cụ thể theo ứng dụng
+Một token không thể hiện rõ token này cấp cho "ứng dụng A" hay "ứng dụng B", gây khó kiểm soát quyền theo từng ứng dụng.
+
+3. Token bị thu hồi khó cập nhật
+Vì JWT thường không lưu trạng thái (stateless), nếu bạn muốn thu hồi token khi người dùng đăng xuất ở app A, thì app B vẫn có thể dùng token đó cho đến khi hết hạn.
+
+🛠️ Cách giảm thiểu rủi ro
+✅ Gắn thêm thông tin vào payload như: "aud": "app-a" hoặc "app": "appA" để kiểm tra ứng dụng nào đang sử dụng token.
+
+✅ Sử dụng short-lived token (token ngắn hạn) + refresh token để giảm thiểu tác động khi token bị lộ.
+
+✅ Áp dụng thêm các biện pháp như kiểm tra IP, thiết bị, hoặc cấp token riêng cho từng app nếu cần phân tách rõ ràng.
