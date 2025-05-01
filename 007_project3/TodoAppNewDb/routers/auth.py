@@ -5,7 +5,7 @@ from typing import Annotated, Optional
 from starlette import status
 from database import SessionLocal
 from fastapi import Depends, HTTPException, APIRouter
-from models import User , Todos
+from models import User 
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
 # CryptContext giúp bạn dễ dàng mã hóa và xác minh mật khẩu bằng cách định nghĩa một "ngữ cảnh mã hóa" (encryption context), tức là cấu hình các thuật toán và tùy chọn mã hóa.
