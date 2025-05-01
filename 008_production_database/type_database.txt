@@ -1,0 +1,42 @@
+📚 CÁC LOẠI CƠ SỞ DỮ LIỆU SẢN XUẤT PHỔ BIẾN & KHI NÀO NÊN DÙNG
+
+🐬 1. MySQL
+- ✅ Miễn phí, phổ biến, dễ triển khai.
+- 🔹 **Nên dùng khi:** Dự án web thương mại điện tử, blog, trang tin tức có lượng truy cập lớn và yêu cầu tốc độ cao nhưng không quá phức tạp về dữ liệu.
+---
+
+🐘 2. PostgreSQL
+- ✅ Mạnh về xử lý dữ liệu phức tạp, hỗ trợ chuẩn SQL cao.
+- 🔹 **Nên dùng khi:** Hệ thống cần xử lý dữ liệu phức tạp, cần đảm bảo tính toàn vẹn dữ liệu như tài chính, bản đồ (GIS), các hệ thống nghiên cứu.
+- What is PostgreSQL?
+    + Production ready
+    + Open - source relational database management system
+    + Secure
+    + Requires a Server
+    + Scalable
+---
+
+🛡️ 3. Oracle Database
+- ✅ Bảo mật cao, hiệu năng cực tốt trong môi trường doanh nghiệp.
+- 🔹 **Nên dùng khi:** Doanh nghiệp lớn, hệ thống ERP, ngân hàng, hoặc các ứng dụng cần đảm bảo hoạt động liên tục và khối lượng giao dịch lớn.
+---
+
+🧩 4. Microsoft SQL Server
+- ✅ Tích hợp mạnh với hệ sinh thái Microsoft (.NET, Azure...).
+- 🔹 **Nên dùng khi:** Dự án doanh nghiệp sử dụng công nghệ Microsoft, các phần mềm nội bộ, ứng dụng quản lý doanh nghiệp vừa và lớn.
+---
+
+🍃 5. MongoDB
+- ✅ NoSQL, linh hoạt, dễ mở rộng với dữ liệu phi cấu trúc.
+- 🔹 **Nên dùng khi:** Ứng dụng cần tốc độ phát triển nhanh, dữ liệu không cố định như blog động, mạng xã hội, hệ thống ghi log.
+---
+
+⚡ 6. Redis
+- ✅ In-memory, cực nhanh, phù hợp cho cache và xử lý thời gian thực.
+- 🔹 **Nên dùng khi:** Hệ thống cần lưu tạm, hàng đợi, thống kê nhanh, hoặc pub/sub (ví dụ: xếp hàng người dùng, đếm lượt xem).
+---
+
+🌟 7. MariaDB
+- ✅ Tương thích MySQL, mã nguồn mở hoàn toàn.
+- 🔹 **Nên dùng khi:** Cần thay thế MySQL bằng bản mở hoàn toàn mà vẫn giữ hiệu năng và cú pháp tương tự.
+

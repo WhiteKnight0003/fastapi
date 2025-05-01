@@ -1,0 +1,37 @@
+CƠ SỞ DỮ LIỆU SẢN XUẤT (PRODUCTION DATABASE) VÀ SO SÁNH VỚI SQLITE
+
+1. Cơ sở dữ liệu sản xuất là gì?
+Cơ sở dữ liệu sản xuất là hệ thống cơ sở dữ liệu được sử dụng trong môi trường thực tế, phục vụ người dùng và các ứng dụng đang hoạt động. 
+Đây là nơi lưu trữ dữ liệu thật, được sử dụng bởi doanh nghiệp hoặc tổ chức cho các hoạt động hàng ngày của họ.
+
+
+2. So sánh cơ sở dữ liệu sản xuất và SQLite
+
+| Tiêu chí             | Cơ sở dữ liệu sản xuất (MySQL, PostgreSQL...)         | SQLite                                             |
+|----------------------|-------------------------------------------------------|----------------------------------------------------|
+| Thiết kế             | Cho hệ thống lớn, nhiều người dùng                    | Nhẹ, nhúng vào ứng dụng                             |
+| Kiến trúc            | Kiểu client-server, hỗ trợ nhiều kết nối đồng thời    | Không có server, lưu trữ trong một file duy nhất   |
+| Khả năng mở rộng     | Rất cao, phù hợp với quy mô lớn                       | Hạn chế, chỉ phù hợp với quy mô nhỏ                 |
+| Tính năng            | Đầy đủ (stored procedures, triggers, replication...)  | Đơn giản, giới hạn                                 |
+| Bảo mật              | Phân quyền chi tiết, bảo mật cao                      | Dựa vào hệ điều hành và quyền file                 |
+| Khả năng đồng thời   | Hỗ trợ tốt, nhiều người dùng truy cập                 | Khóa toàn file, hiệu suất thấp khi truy cập đồng thời |
+| Quản lý              | Cần DBA để cấu hình và bảo trì                        | Tự vận hành, gần như không cần quản lý              |
+| Sao lưu và phục hồi  | Có công cụ chuyên dụng, hỗ trợ sao lưu liên tục       | Đơn giản, chỉ cần sao chép file                    |
+
+3. Trường hợp nên dùng cơ sở dữ liệu sản xuất
+- Ứng dụng web có nhiều người dùng đồng thời
+- Hệ thống doanh nghiệp yêu cầu độ tin cậy cao
+- Cần xử lý lượng dữ liệu lớn
+- Yêu cầu tính bảo mật và sao lưu nâng cao
+- Cần độ sẵn sàng và khả dụng cao
+
+4. Trường hợp nên dùng SQLite
+- Ứng dụng di động hoặc nhúng
+- Ứng dụng desktop đơn giản
+- Môi trường phát triển hoặc thử nghiệm
+- Không yêu cầu truy cập đồng thời nhiều người dùng
+
+5. Kết luận
+SQLite rất phù hợp cho phát triển và thử nghiệm, nhưng đối với phần lớn ứng dụng web hoặc doanh nghiệp, 
+các hệ thống cơ sở dữ liệu sản xuất như MySQL, PostgreSQL, SQL Server hoặc Oracle sẽ phù hợp hơn để đảm bảo hiệu năng 
+và độ tin cậy trong môi trường thực tế.
