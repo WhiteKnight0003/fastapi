@@ -1,0 +1,107 @@
+
+TỔNG HỢP CÁC LỆNH ALEMBIC CHI TIẾT TRONG FASTAPI
+
+Alembic cung cấp nhiều lệnh để quản lý phiên bản cơ sở dữ liệu trong dự án FastAPI. Dưới đây là mô tả chi tiết và đầy đủ về các lệnh thường dùng:
+
+────────────────────────────────────────────
+1. LỆNH KHỞI TẠO VÀ CẤU HÌNH
+────────────────────────────────────────────
+➤ alembic init [tên_thư_mục]
+- Chức năng: Khởi tạo môi trường Alembic trong dự án.
+- Kết quả: Tạo thư mục chứa các file cấu hình Alembic (env.py, versions/, script.py.mako,...).
+- Ví dụ: alembic init migrations
+
+➤ alembic list_templates
+- Chức năng: Liệt kê các mẫu template migration có sẵn.
+- Ví dụ: alembic list_templates
+
+────────────────────────────────────────────
+2. LỆNH TẠO VÀ QUẢN LÝ MIGRATIONS
+────────────────────────────────────────────
+➤ alembic revision
+- Chức năng: Tạo migration script trống hoặc tự động phát hiện thay đổi models.
+- Tham số:
+    - -m, --message: Ghi chú cho migration.
+    - --autogenerate: So sánh schema hiện tại với models để tạo script tự động.
+- Ví dụ:
+    - alembic revision -m "Tạo bảng users"
+    - alembic revision --autogenerate -m "Thêm cột email vào bảng users"
+
+➤ alembic branches
+- Chức năng: Hiển thị các nhánh migrations hiện có (dành cho các migration song song).
+- Ví dụ: alembic branches
+
+➤ alembic current
+- Chức năng: Hiển thị phiên bản hiện tại mà database đang áp dụng.
+- Ví dụ: alembic current
+
+➤ alembic history
+- Chức năng: Hiển thị lịch sử migration.
+- Tham số: 
+    --range [from:to]: Chỉ hiện các migration trong khoảng nhất định.
+- Ví dụ:
+    - alembic history
+    - alembic history --range 1a2b3c:4d5e6f
+
+────────────────────────────────────────────
+3. LỆNH ÁP DỤNG MIGRATIONS
+────────────────────────────────────────────
+➤ alembic upgrade
+- Chức năng: Cập nhật database lên phiên bản mới hơn.
+- Tham số:
+    - head: Phiên bản mới nhất.
+    - +N: Tiến tới N phiên bản tiếp theo.
+    - [revision_id]: Chỉ định ID cụ thể.
+- Ví dụ:
+    - alembic upgrade head
+    - alembic upgrade +2
+    - alembic upgrade 1a2b3c4d5e6f
+
+➤ alembic downgrade
+- Chức năng: Quay lại phiên bản cũ hơn.
+- Tham số:
+    - base: Quay về phiên bản ban đầu.
+    - -N: Lùi lại N phiên bản.
+    - [revision_id]: Lùi về ID cụ thể.
+- Ví dụ:
+    - alembic downgrade base
+    - alembic downgrade -2
+    - alembic downgrade 1a2b3c4d5e6f
+
+➤ alembic stamp
+- Chức năng: Gắn mốc phiên bản hiện tại mà không thực thi script migration.
+- Ví dụ: alembic stamp head
+
+────────────────────────────────────────────
+4. LỆNH KIỂM TRA VÀ SO SÁNH
+────────────────────────────────────────────
+➤ alembic check
+- Chức năng: Kiểm tra xem migrations có được áp dụng đầy đủ chưa.
+- Ví dụ: alembic check
+
+➤ alembic show [revision_id|head]
+- Chức năng: Hiển thị thông tin chi tiết về một migration cụ thể.
+- Ví dụ: alembic show head
+
+➤ alembic heads
+- Chức năng: Hiển thị các migration đầu (chưa có nhánh con).
+- Ví dụ: alembic heads
+
+➤ alembic merge
+- Chức năng: Hợp nhất các nhánh migration (trong trường hợp có nhiều nhánh song song).
+- Ví dụ: alembic merge -m "Merge nhánh" branch1 branch2
+
+────────────────────────────────────────────
+5. MẸO KHI SỬ DỤNG ALEMBIC TRONG FASTAPI
+────────────────────────────────────────────
+✔ Đảm bảo file env.py được cấu hình đúng để import toàn bộ SQLAlchemy models.
+✔ Luôn kiểm tra file migration được tạo tự động để tránh sai sót.
+✔ Khi triển khai sản phẩm: Sử dụng offline migration với lệnh:
+   alembic upgrade head --sql > script.sql
+✔ Quản lý kỹ các nhánh migration nếu nhiều người cùng phát triển.
+
+────────────────────────────────────────────
+TÀI LIỆU THAM KHẢO:
+- https://alembic.sqlalchemy.org
+- FastAPI SQL (https://fastapi.tiangolo.com/tutorial/sql-databases/)
+

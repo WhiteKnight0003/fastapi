@@ -3,6 +3,12 @@
 🐬 1. MySQL
 - ✅ Miễn phí, phổ biến, dễ triển khai.
 - 🔹 **Nên dùng khi:** Dự án web thương mại điện tử, blog, trang tin tức có lượng truy cập lớn và yêu cầu tốc độ cao nhưng không quá phức tạp về dữ liệu.
+- What is MySQL?
+    + Production ready
+    + Open - source relational database management system
+    + Secure
+    + Requires a Server
+    + Scalable
 ---
 
 🐘 2. PostgreSQL
