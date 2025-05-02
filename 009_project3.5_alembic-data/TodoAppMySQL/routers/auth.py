@@ -118,6 +118,7 @@ class CreateUserRequest(BaseModel):
     hashed_password: str
     is_active:bool
     role: str
+    phone_number: str
 
 
 class Token(BaseModel):

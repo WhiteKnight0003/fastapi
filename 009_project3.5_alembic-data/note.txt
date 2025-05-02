@@ -1,0 +1,50 @@
+- tạo 1 alembic mới 
+gõ cmd trong folder cần :  alembic init alembic_name
+
+- trong file alembic.ini sửa link database như trong file database.py
+
+- trong file env.py sửa các dòng sau nhưu sau 
+
+import models
+
+
+1 .
+# Interpret the config file for Python logging.
+# This line sets up loggers basically.
+fileConfig(config.config_file_name)
+
+2. 
+target_metadata = models.Base.metadata
+
+
+- tiếp theo để thêm 1 cột vào database bằng alembic
+    + GÕ CÂU LỆNH   alembic revision -m "Create phone number for users column" vào CMD :
+        + Tạo một file migration mới:  tạo ra một file Python mới trong thư mục versions để định nghĩa những thay đổi bạn muốn thực hiện với cơ sở dữ liệu.
+        
+        + Đặt tên cho migration: Phần -m "Create phone number for users column" cung cấp một mô tả về mục đích của migration này, 
+            giúp bạn và các nhà phát triển khác hiểu migration này làm gì mà không cần mở file.
+
+    + TA ĐƯỢC KẾT QUẢ NHƯ DƯỚI ĐÂY
+        (llms) F:\python\full-stack-web\fast-api\009_project3.5_alembic-data\TodoAppMySQL>alembic revision -m "Create phone number for users column"
+        Generating F:\python\full-stack-web\fast-api\009_project3.5_alembic-data\TodoAppMySQL\alembicApp\versions\6ed4c4722e30_create_phone_number_for_users_column.py ...  done
+
+    + vào file trong đường dẫn trên ta thấy có 2 hàm 
+        def downgrade() -> None:
+        def upgrade() -> None:
+
+    + sau khi sửa 2 hàm kia xong , ta sẽ lấy cái Revision ID
+
+    + ví dụ revision id = 6ed4c4722e30
+        chạy lệnh trên CMD :  alembic upgrade 6ed4c4722e30
+        => ví dụ như trong hàm upgrade bạn thêm 1 cột thì khi dạy ra kq dưới này bạn đã thành công 
+
+        (llms) F:\python\full-stack-web\fast-api\009_project3.5_alembic-data\TodoAppMySQL>alembic upgrade 6ed4c4722e30
+        INFO  [alembic.runtime.migration] Context impl MySQLImpl.
+        INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
+        INFO  [alembic.runtime.migration] Running upgrade  -> 6ed4c4722e30, Create phone number for users column
+
+    + đối với downgrade nó sẽ hạ 1 cấp so với lần cuối cùng bạn thực hiện upgrade  
+    (hay Lệnh này sẽ hạ (downgrade) schema của cơ sở dữ liệu xuống một phiên bản trước đó, tức là "rollback" migration gần nhất đã được upgrade.)
+    + chạy lệnh với terminal :  alembic downgrade -1
+    
+
