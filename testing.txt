@@ -1,0 +1,34 @@
+💡 What is Testing? (Kiểm thử là gì?)
+✅ Khái niệm:
+- Testing là cách để chúng ta đảm bảo ứng dụng hoạt động đúng như mong đợi.
+- Là một phần quan trọng trong vòng đời phát triển phần mềm (Software Development Lifecycle – SDLC).
+
+🎯 Mục tiêu chính của testing:
+    Phát hiện và xử lý các vấn đề như:
+    + 🐞 Bugs (lỗi chương trình)
+    + ❌ Errors (sai sót trong logic hoặc cú pháp)
+    + ⚠️ Defects (khi phần mềm không đáp ứng đúng yêu cầu thiết kế)
+
+Đảm bảo phần mềm:
+    - Phù hợp với yêu cầu và thông số kỹ thuật của người dùng.
+    - Có chất lượng cao, đáng tin cậy, an toàn, và thân thiện với người dùng.
+
+🔍 Các loại Testing phổ biến (ảnh thứ hai):
+🧪 Manual Testing (Kiểm thử thủ công):
+    + Người kiểm thử thực hiện thao tác trực tiếp với phần mềm để phát hiện lỗi.
+    + Không sử dụng script hay công cụ tự động.
+    + Dùng nhiều trong giai đoạn đầu hoặc để kiểm thử giao diện người dùng.
+
+⚙️ Unit Testing (Kiểm thử đơn vị):
+    + Kiểm tra từng thành phần nhỏ nhất của phần mềm (thường là hàm hoặc module).
+    + Thường được viết bởi lập trình viên, sử dụng framework như pytest, unittest.
+
+🔗 Integration Testing (Kiểm thử tích hợp):
+    + Kiểm tra sự kết hợp giữa các module hoặc thành phần khác nhau.
+    + Mục tiêu: đảm bảo chúng hoạt động đúng khi tích hợp với nhau (ví dụ: kết nối API với database).
+
+
+- ở đây ta dùng thư viện pytest để kiểm thử
+Khi bạn chạy pytest, framework này sẽ:
+
+Tìm tất cả các hàm có bắt đầu bằng test_
