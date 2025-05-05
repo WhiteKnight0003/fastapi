@@ -1,8 +1,10 @@
 from fastapi import APIRouter , Depends, HTTPException, Path
 from starlette import status
 from pydantic import BaseModel, Field
-from models import Todos
-from database  import SessionLocal
+# nhưng file nằm ngoài folder thì ..
+# những file cùng folder thì .
+from ..models import Todos
+from ..database  import SessionLocal
 from typing import Annotated
 from sqlalchemy.orm import Session
 
